@@ -18,6 +18,7 @@ export default function TypeaheadSearch() {
   const [debouncedQuery, setDebouncedQuery] = useState('');
   const [suggestions, setSuggestions] = useState([]);
 
+  // for adding debounce delay to the query
   useEffect(() => {
     const timer = setTimeout(() => {
       setDebouncedQuery(query);
@@ -25,6 +26,7 @@ export default function TypeaheadSearch() {
     return () => clearTimeout(timer);
   }, [query]);
 
+  // for filtering the items based on the debounced query
   useEffect(() => {
     if (debouncedQuery.trim() === '') {
       setSuggestions([]);
