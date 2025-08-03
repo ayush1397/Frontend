@@ -1,17 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import SuggestionList from './SuggestionList';
 
-const items = [
-  'Apple',
-  'Banana',
-  'Orange',
-  'Grapes',
-  'Mango',
-  'Pineapple',
-  'Peach',
-  'Watermelon',
-  'Strawberry',
-];
+const items = ['Apple', 'Banana', 'Orange', 'Grapes', 'Mango', 'Pineapple', 'Peach', 'Watermelon', 'Strawberry'];
 
 export default function TypeaheadSearch() {
   const [query, setQuery] = useState('');
