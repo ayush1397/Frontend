@@ -5,48 +5,43 @@ interface Item {
   text: string;
 }
 
-interface FetchResponse {
-  items: Item[];
-  hasMore: boolean;
-}
-
-// Mock API call to fetch items
-const fetchItems = (page: number, limit = 10): Promise<FetchResponse> => {
+// Mock API call to fetch items (no hasMore returned)
+const fetchItems = (page: number, limit = 10): Promise<Item[]> => {
   return new Promise((resolve) => {
     setTimeout(() => {
       if (page > 5) {
-        resolve({ items: [], hasMore: false });
+        resolve([]); // No more items
       } else {
         const items = Array.from({ length: limit }, (_, idx) => ({
           id: page * limit + idx + 1,
-          text: `Item #${page * limit + idx + 1}`
+          text: `Item #${page * limit + idx + 1}`,
         }));
-        resolve({ items, hasMore: true });
+        resolve(items);
       }
     }, 1000);
   });
 };
 
-const App = () => {
+export default function App() {
   const [items, setItems] = useState<Item[]>([]);
   const [page, setPage] = useState(1);
   const [hasMore, setHasMore] = useState(true);
 
-  // Load more items when the user scrolls to the bottom of the page
   const loadMore = () => {
-    fetchItems(page).then((res: FetchResponse) => {
-      setItems((prev) => [...prev, ...res.items]);
-      setHasMore(res.hasMore);
-      if (res.hasMore) setPage((prev) => prev + 1);
+    fetchItems(page).then((newItems: Item[]) => {
+      if (newItems.length === 0) {
+        setHasMore(false); // No more items
+      } else {
+        setItems((prev) => [...prev, ...newItems]);
+        setPage((prev) => prev + 1);
+      }
     });
   };
 
-  // Load initial items
   useEffect(() => {
     loadMore();
   }, []);
 
-  // Load more items when the user scrolls to the bottom of the page
   useEffect(() => {
     const handleScroll = () => {
       const nearBottom =
@@ -62,7 +57,6 @@ const App = () => {
     return () => window.removeEventListener("scroll", handleScroll);
   }, [hasMore, page]);
 
- 
   return (
     <div style={{ maxWidth: "500px", margin: "0 auto", padding: "20px" }}>
       <h2>Infinite Scroll (Minimal)</h2>
@@ -83,4 +77,3 @@ const App = () => {
   );
 };
 
-export default App;
