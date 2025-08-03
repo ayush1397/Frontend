@@ -1,20 +1,31 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 
 export default function ProgressBar() {
   const [progress, setProgress] = useState(0);
 
-  useEffect(() => {
-    if (progress >= 100) return;
-
-    const timer = setInterval(() => {
-      setProgress(prev => Math.min(prev + 10, 100));
-    }, 500); // Increase progress every 500ms
-
-    return () => clearInterval(timer); // Cleanup on unmount
-  }, [progress]);
+  const handleChange = (e) => {
+    const value = Math.min(Math.max(Number(e.target.value), 0), 100); // Clamp between 0 and 100
+    setProgress(value);
+  };
 
   return (
     <div style={{ padding: '20px', width: '300px' }}>
+      <input
+        type="number"
+        value={progress}
+        onChange={handleChange}
+        min="0"
+        max="100"
+        style={{
+          marginBottom: '12px',
+          width: '100%',
+          padding: '8px',
+          fontSize: '16px',
+          border: '1px solid #ccc',
+          borderRadius: '4px',
+        }}
+      />
+
       <div
         style={{
           height: '24px',
@@ -33,7 +44,9 @@ export default function ProgressBar() {
           }}
         />
       </div>
+
       <p style={{ textAlign: 'center', marginTop: '8px' }}>{progress}%</p>
     </div>
   );
 }
+
