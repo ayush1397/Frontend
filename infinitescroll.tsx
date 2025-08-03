@@ -1,6 +1,16 @@
 import React, { useState, useEffect } from "react";
 
-const fetchItems = (page, limit = 10) => {
+interface Item {
+  id: number;
+  text: string;
+}
+
+interface FetchResponse {
+  items: Item[];
+  hasMore: boolean;
+}
+
+const fetchItems = (page: number, limit = 10): Promise<FetchResponse> => {
   return new Promise((resolve) => {
     setTimeout(() => {
       if (page > 5) {
@@ -17,12 +27,12 @@ const fetchItems = (page, limit = 10) => {
 };
 
 const App = () => {
-  const [items, setItems] = useState([]);
+  const [items, setItems] = useState<Item[]>([]);
   const [page, setPage] = useState(1);
   const [hasMore, setHasMore] = useState(true);
 
   const loadMore = () => {
-    fetchItems(page).then((res) => {
+    fetchItems(page).then((res: FetchResponse) => {
       setItems((prev) => [...prev, ...res.items]);
       setHasMore(res.hasMore);
       if (res.hasMore) setPage((prev) => prev + 1);
