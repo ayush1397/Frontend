@@ -8,7 +8,7 @@ export default function TodoList() {
   const addTodoItem = () => {
     const newTodoItem = {
       id: todoList.length + 1,
-      text: input,
+      text: input.trim(),
       completed: false,
     };
     setTodoList((prev) => [...prev, newTodoItem]);
