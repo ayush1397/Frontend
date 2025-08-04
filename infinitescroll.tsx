@@ -23,6 +23,7 @@ const fetchItems = (page: number, limit = 10): Promise<Item[]> => {
 };
 
 export default function App() {
+
   const [items, setItems] = useState<Item[]>([]);
   const [page, setPage] = useState(1);
   const [hasMore, setHasMore] = useState(true);
@@ -32,8 +33,8 @@ export default function App() {
       if (newItems.length === 0) {
         setHasMore(false); // No more items
       } else {
-        setItems((prev) => [...prev, ...newItems]);
-        setPage((prev) => prev + 1);
+        setItems((curr) => [...curr, ...newItems]);
+        setPage((curr) => curr + 1);
       }
     });
   };
